@@ -5,6 +5,7 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'language' => 'ru_Ru',
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
@@ -21,7 +22,9 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-       
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
