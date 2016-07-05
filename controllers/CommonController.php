@@ -4,7 +4,7 @@
 namespace app\controllers;
 
 use app\models\LoginForm;
-use yii\base\Controller;
+use yii\web\Controller;
 use app\models\User;
 
 class CommonController extends Controller
@@ -12,7 +12,7 @@ class CommonController extends Controller
     public function actionIndex()
     {
         if (\Yii::$app->user->identity) {
-            return $this->render('index');
+            $this->redirect('?r=order/test');
         }
         return $this->actionLogin();
     }
@@ -21,11 +21,11 @@ class CommonController extends Controller
     {
         $model = new LoginForm();
         if ($model->load(\Yii::$app->request->post()) && $model->login()) {
-            return $this->render('index');
+            $this->redirect('?r=order/test');
         }
         return $this->render('login', ['model' => $model]);
     }
-
+    
     public function actionLogout()
     {
         \Yii::$app->user->logout();

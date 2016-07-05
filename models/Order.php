@@ -15,7 +15,18 @@ class Order extends ActiveRecord
     {
         return 'orders';
     }
+    public function rules()
+    {
+        return [
+            [['route','drivers_id', 'status', 'cars_id'], 'required']
+        ];
+    }
 
+    public function getUserDescription()
+    {
+        return $this->hasOne(UserDescription::className(),['users_id'=>'users_id']);
+    }
+           
     public function getUsers()
     {
         return $this->hasOne(User::className(), ['id' => 'users_id']);

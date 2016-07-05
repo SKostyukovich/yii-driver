@@ -27,10 +27,15 @@ class LoginForm extends ActiveRecord
         return 'users';
     }
 
-    public function login()
+    public function getId()
     {
+        return $this->findOne(['username' => $this->username])->getAttribute('id');
+    }
+        public function login()
+    {
+
         if ($this->validate()) {
-           return  \Yii::$app->user->login(User::findIdentity(1), 3600*24*30);
+           return  \Yii::$app->user->login(User::findIdentity($this->getId()), 3600*24*30);
         }
         return false;
     }

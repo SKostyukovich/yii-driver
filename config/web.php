@@ -8,6 +8,14 @@ $config = [
     'language' => 'ru_Ru',
     'bootstrap' => ['log'],
     'components' => [
+        'formatter'=>[
+           'dateFormat' => 'd-M-Y',
+           'datetimeFormat' => 'd-M-Y H:i:s',
+           'timeFormat' => 'H:i:s',
+
+           'locale' => 'ru-Ru', //your language locale
+           'defaultTimeZone' => 'Europe/Berlin', // time zone
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'yii-driver',

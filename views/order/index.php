@@ -1,7 +1,10 @@
 <?php
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-
+use yii\bootstrap\ActiveForm;
+use bootui\datetimepicker\Datepicker;
+use yii\bootstrap\Html;
+use kartik\widgets\DateTimePicker;
 $dataProvider = new ActiveDataProvider([
                                            'query'      => $query,
                                            'pagination' => [
@@ -11,13 +14,12 @@ $dataProvider = new ActiveDataProvider([
 echo GridView::widget([
                           'dataProvider' => $dataProvider,
                           'columns'      => [
-                              ['attribute' => 'id'],
+                              ['attribute' => 'id',
+                               'header'    => '№'
+                              ],
 
-                              ['attribute' => 'users',
-                               'value'     => function ($data) {
-                                   return $data->users->username;
-                               },
-                               'header'    => 'Имя пользователя'
+                              ['attribute' => 'route',
+                               'header'    => 'Маршрут'
                               ],
 
                               ['attribute'      => 'status',
@@ -30,19 +32,52 @@ echo GridView::widget([
                                        case 3:
                                            return ['class' => 'warning'];
                                            break;
+                                       case 2:
+                                           return ['class' => 'danger'];
+                                           break;
                                        case 1:
                                            return ['class' => 'success'];
                                            break;
-                                       case 2:
-                                           return ['class' => 'danger'];
                                        default:
                                            return [];
-
                                    }
-
-
                                }
+                              ],
+                              /* [
+                                   'attribute' => 'users_description',
+                                   'value' => function($data)
+                                   {
+                                       return ($data->userDescription->name. ' ' . $data->userDescription->surname );
+                                   },
+                                   'header' => 'Имя пользователя'
+                               ]*/
+                              ['attribute' => 'start',
+                               'format'    => 'datetime',
+                               'header'    => 'Дата'
+                              ],
 
-                              ]
                           ]
                       ]);
+
+?>
+<div>
+    <h2>Добавить заявку</h2>
+<?php
+$form = ActiveForm::begin([
+                              'id'      => 'common__login-form',
+                              'options' => [
+                                  'class' => 'col-md-4',
+                              ],
+                          ]); ?>
+<?=  $form->field($model, 'start')->widget(DateTimePicker::classname(), [
+    'options' => ['placeholder' => 'Введите дату и время'],
+    'pluginOptions' => [
+        'autoclose' => true
+    ]
+])->label('Дата и время поездки'); ?>
+<?= $form->field($model, 'route')->textarea()->label('Маршрут'); ?>
+<?=
+Html::submitButton('Отправить', ['class' => 'btn btn-primary']);
+ActiveForm::end();
+?>
+</div>
