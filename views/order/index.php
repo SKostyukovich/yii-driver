@@ -2,9 +2,11 @@
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 use yii\bootstrap\ActiveForm;
-use bootui\datetimepicker\Datepicker;
 use yii\bootstrap\Html;
-use kartik\widgets\DateTimePicker;
+use kartik\widgets\DatePicker;
+use kartik\widgets\TimePicker;
+
+
 $dataProvider = new ActiveDataProvider([
                                            'query'      => $query,
                                            'pagination' => [
@@ -51,9 +53,13 @@ echo GridView::widget([
                                    },
                                    'header' => 'Имя пользователя'
                                ]*/
-                              ['attribute' => 'start',
-                               'format'    => 'datetime',
+                              ['attribute' => 'date',
+                               'format'    => 'date',
                                'header'    => 'Дата'
+                              ],
+                              ['attribute' => 'time',
+                               'format'    => 'time',
+                               'header'    => 'Время'
                               ],
 
                           ]
@@ -62,22 +68,32 @@ echo GridView::widget([
 ?>
 <div>
     <h2>Добавить заявку</h2>
-<?php
-$form = ActiveForm::begin([
-                              'id'      => 'common__login-form',
-                              'options' => [
-                                  'class' => 'col-md-4',
-                              ],
-                          ]); ?>
-<?=  $form->field($model, 'start')->widget(DateTimePicker::classname(), [
-    'options' => ['placeholder' => 'Введите дату и время'],
-    'pluginOptions' => [
-        'autoclose' => true
-    ]
-])->label('Дата и время поездки'); ?>
-<?= $form->field($model, 'route')->textarea()->label('Маршрут'); ?>
-<?=
-Html::submitButton('Отправить', ['class' => 'btn btn-primary']);
-ActiveForm::end();
-?>
+    <?php
+    $form = ActiveForm::begin([
+                                  'id'      => 'common__login-form',
+                                  'options' => [
+                                      'class' => 'col-md-4',
+                                  ],
+                              ]); ?>
+    <?= $form->field($model, 'date')->widget(DatePicker::classname(), [
+            'language' => 'ru',
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+    ])->label('Дата поездки'); ?>
+    <?= $form->field($model, 'time')->widget(TimePicker::className(),[
+        'options' => ['placeholder' => 'ВВедите время'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'showMeridian' => false
+
+
+        ]
+    ])->label('Время начала поездки'); ?>
+    <?= $form->field($model, 'route')->textInput()->label('Маршрут'); ?>
+    <?= $form->field($model, 'comment')->textarea()->label('Комментарий');?>
+    <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']);
+    ActiveForm::end();
+    ?>
 </div>

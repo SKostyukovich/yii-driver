@@ -30,7 +30,7 @@ AppAsset::register($this);
         'brandLabel' => 'Некрасовка@Транспорт',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-fixed-top',
+            'class' => 'navbar-fixed-top navbar-inverse',
             'style' => ['color' => 'white']
         ],
     ]);

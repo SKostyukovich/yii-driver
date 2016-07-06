@@ -1,78 +1,99 @@
 <?php
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\data\ActiveDataProvider;
-use yii\bootstrap\Modal;
+use kartik\export\ExportMenu;
+use yii\helpers\Html;
+
+$columnsGrid = [
+    [
+        'class'  => 'yii\grid\SerialColumn',
+        'header' => '№'
+    ],
+    [
+        'attribute' => 'route',
+        'header'    => 'Маршрут',
+    ],
+    [
+        'attribute' => 'date',
+        'format'    => 'date',
+        'header'    => 'Дата'
+    ],
+    [
+        'attribute' => 'time',
+        'format'    => 'time',
+        'header'    => 'Время'
+    ],
+    [
+        'value'  => function ($data) {
+            return $data->userDescription->name . ' ' . $data->userDescription->surname;
+        },
+        'header' => 'Заказчик'
+
+    ],
+    [
+        'value'  => function ($data) {
+            return $data->userDescription->department;
+        },
+        'header' => 'Отдел'
+    ],
+    ['attribute'      => 'status',
+     'value'          => function ($data) {
+         return $data->statuslist->description;
+     },
+     'header'         => 'Статус',
+     'contentOptions' => function ($model) {
+         switch ($model->statuslist->getAttribute('id')) {
+             case 3:
+                 return ['class' => 'warning'];
+                 break;
+             case 2:
+                 return ['class' => 'danger'];
+                 break;
+             case 1:
+                 return ['class' => 'success'];
+                 break;
+             default:
+                 return [];
+         }
+     }
+    ],
+    [
+        'class'         => 'yii\grid\ActionColumn',
+        'header'        => 'Действия',
+        'headerOptions' => ['width' => '80'],
+        'template'      => '{view} {update} {delete} {link}',
+        'buttons'       => [
+            'update' => function ($url) {
+                return Html::a('<span style="color:orange" class="glyphicon glyphicon-pencil"></span>', $url);
+            },
+            'view'   => function ($url) {
+                return Html::a('<span style="color:green" class="glyphicon glyphicon-eye-open"></span>', $url);
+            },
+            'delete' => function($url) {
+                return Html::a('<span style="color:red" class="glyphicon glyphicon-trash"></span>', $url);
+            }
+        ],
+    ],
+];
 $dataProvider = new ActiveDataProvider([
                                            'query'      => $query,
                                            'pagination' => [
-                                               'pageSize' => 10,
+                                               'pageSize' => 15,
                                            ],
                                        ]);
-echo Gridview::widget(
+echo GridView::widget(
     ['dataProvider' => $dataProvider,
-     'layout'       => "{items}",
-     'columns'      => [
-         [
-             'class'  => 'yii\grid\SerialColumn',
-             'header' => '№'
-         ],
-         [
-             'attribute' => 'route',
-             'header'    => 'Маршрут',
-         ],
-         [
-             'attribute' => 'start',
-             'format'    => 'date',
-             'header'    => 'начало'
-         ],
-         [
-             'value'  => function ($data) {
-                 return $data->userDescription->name . ' ' . $data->userDescription->surname;
-             },
-             'header' => 'Заказчик'
-
-         ],
-         [
-             'value'  => function ($data) {
-                 return $data->userDescription->department;
-             },
-             'header' => 'Отдел'
-         ],
-         ['attribute'      => 'status',
-          'value'          => function ($data) {
-              return $data->statuslist->description;
-          },
-          'header'         => 'Статус',
-          'contentOptions' => function ($model) {
-              switch ($model->statuslist->getAttribute('id')) {
-                  case 3:
-                      return ['class' => 'warning'];
-                      break;
-                  case 2:
-                      return ['class' => 'danger'];
-                      break;
-                  case 1:
-                      return ['class' => 'success'];
-                      break;
-                  default:
-                      return [];
-              }
-          }
-         ],
-         [
-             'class'         => 'yii\grid\ActionColumn',
-             'header'        => 'Действия',
-             'headerOptions' => ['width' => '80'],
-             'template'      => '{view} {update} {delete} {link}',
-         ],
-     ]
+     'layout'       => "{items}\n{pager}",
+     'columns'      => $columnsGrid
     ]
 );
-Modal::begin([
-                 'header' => '<h2>Hello world</h2>',
-                 'toggleButton' => ['label' => 'click me'],
-             ]);
 
-echo 'Say hello...';
-
-Modal::end();
+echo ExportMenu::widget([
+                            'dataProvider'    => $dataProvider,
+                            'columns'         => $columnsGrid,
+                            'fontAwesome'     => true,
+                            'dropdownOptions' => [
+                                'label' => 'Экспорт',
+                                'class' => 'btn btn-default'
+                            ],
+                        ]);

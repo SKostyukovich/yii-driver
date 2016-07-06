@@ -27,7 +27,9 @@ $form = ActiveForm::begin([
 
 <?= $form->field($model, 'route')->textInput()->label('Маршрут'); ?>
 <?= $form->field($model, 'drivers_id')->dropDownList($driver_items)->label('Выбор водителя'); ?>
-<?= $form->field($model, 'status')->dropDownList($status_items,['class'=> $statusClass])->label('Состояние заказа'); ?>
+<?= $form->field($model, 'status')->dropDownList($status_items,
+                                                 ['class' => $statusClass])->label('Состояние заказа'); ?>
 <?= $form->field($model, 'cars_id')->dropDownList($cars_items)->label('Автомобиль'); ?>
-<?= Html::submitButton('отправить') ?>
+<?= $form->field($model, 'source')->textInput()->label('Основание') ?>
+<?= Html::submitButton('отправить', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end() ?>

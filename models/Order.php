@@ -18,7 +18,8 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['route','drivers_id', 'status', 'cars_id'], 'required']
+            [['route','drivers_id', 'status', 'cars_id'], 'required'],
+            ['source', 'string']
         ];
     }
 

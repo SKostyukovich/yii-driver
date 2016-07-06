@@ -19,6 +19,7 @@ class OrderForm extends ActiveRecord
     }
     public function rules()
     {
-       return [[['route','start'],'required']];
+       return [[['route','date','time'],'required'],
+       ['comment','string']];
     }
 }
