@@ -10,6 +10,8 @@ namespace app\controllers;
 
 use app\models\Order;
 use app\models\OrderForm;
+use app\models\OrderSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Driver;
 use app\models\Statuslist;
@@ -18,7 +20,7 @@ use yii\web\NotFoundHttpException;
 
 class OrderController extends Controller
 {
-    public function actionTest()
+    public function actionIndex()
     {
         if (\Yii::$app->user->can('createPost')) {
             return $this->actionAdmin();
@@ -28,7 +30,7 @@ class OrderController extends Controller
             $model->users_id = \Yii::$app->user->id;
             $model->status = 3;
             $model->save();
-            $this->redirect('?r=order/test');
+            $this->redirect('?r=order/index');
         }
 
         if ($query = Order::find()->where([
@@ -43,16 +45,16 @@ class OrderController extends Controller
         return $this->redirect('?r=common/index');
     }
 
-    public function actionUpdate()
+    public function actionUpdate($id)
     {
 
-        if ($model = Order::find()->where(['id' => \Yii::$app->request->get('id')])->one()) {
+        if ($model = $this->findModel($id)) {
             $drivers = Driver::find()->all();
             $statusList = Statuslist::find()->all();
             $cars = Car::find()->all();
             if ($model->load(\Yii::$app->request->post())) {
                 $model->save();
-                return $this->actionTest();
+                return $this->actionIndex();
             }
             return $this->render('update', [
                 'model'      => $model,
@@ -65,22 +67,23 @@ class OrderController extends Controller
 
     }
 
-    public function actionDelete()
+    public function actionDelete($id)
     {
-        $model = Order::findOne(['id' => \Yii::$app->request->get('id')]);
+        $model = $this->findModel($id);
         $model->delete();
-        $this->redirect('/?r=order/test');
+        $this->redirect('/?r=order/index');
     }
 
     public function actionAdmin()
     {
-        $model = new Order;
-        if ($query = Order::find()) {
+        $searchModel = new OrderSearch();
+        $dataProvider = $searchModel->search(\Yii::$app->request->get());
+
             return $this->render('admin', [
-                'query' => $query,
-                'model' => $model
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel
             ]);
-        }
+
     }
 
     protected function findModel($id)
@@ -88,7 +91,7 @@ class OrderController extends Controller
         if (($model = Order::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Страница не найдена');
         }
     }
 
@@ -97,5 +100,24 @@ class OrderController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionSummary()
+    {
+        $cars = ArrayHelper::map(Car::find()->all(), 'id', 'name');
+        foreach ($cars as $key => $car) {
+            $queries[] = Order::find()->where(['cars_id' => $key]);
+        }
+        if (!empty($queries)) {
+            return $this->render('summary', ['queries' => $queries]);
+        }
+    }
+
+    public function actionSuspend($id)
+    {
+        $model = Order::findOne($id);
+        $model->status = 4;
+        $model->save();
+        return $this->actionIndex();
     }
 }

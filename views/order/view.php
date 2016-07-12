@@ -9,18 +9,9 @@ use yii\widgets\DetailView;
 
 
 ?>
-<div class="order-view">
+<div class="order-view" >
     <h1><?=Html::encode($this->title);?></h1>
 
-    <?=  DetailView::widget(['model' => $model,
-        'attributes'=>[
-            'id',
-            'status',
-            'route',
-            [
-                'attribute' => 'status',
-                'value' => $model->statuslist->description
-            ]
-        ]]);
+    <?=  DetailView::widget(['model' => $model]);
 ?>
 </div>

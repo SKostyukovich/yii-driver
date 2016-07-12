@@ -5,6 +5,8 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use kartik\widgets\DatePicker;
 use kartik\widgets\TimePicker;
+use yii\grid\ActionColumn;
+use yii\helpers\Url;
 
 
 $dataProvider = new ActiveDataProvider([
@@ -31,6 +33,8 @@ echo GridView::widget([
                                'header'         => 'Статус',
                                'contentOptions' => function ($model) {
                                    switch ($model->statuslist->getAttribute('id')) {
+                                       case 4:
+                                           return ['class' => 'info'];
                                        case 3:
                                            return ['class' => 'warning'];
                                            break;
@@ -45,6 +49,7 @@ echo GridView::widget([
                                    }
                                }
                               ],
+
                               /* [
                                    'attribute' => 'users_description',
                                    'value' => function($data)
@@ -61,7 +66,19 @@ echo GridView::widget([
                                'format'    => 'time',
                                'header'    => 'Время'
                               ],
+                              [
+                                  'class'    => ActionColumn::className(),
+                                  'buttons'  => ['edit' => function ($url, $model) {
 
+                                      $url = Url::toRoute(['suspend', 'id' => $model->id]);
+                                      return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                          'title'     => \Yii::t('yii', 'Update'),
+                                          'data-pjax' => '0',
+                                      ]);
+                                  },
+                                  ],
+                                  'template' => '{edit}',
+                              ],
                           ]
                       ]);
 
@@ -76,23 +93,23 @@ echo GridView::widget([
                                   ],
                               ]); ?>
     <?= $form->field($model, 'date')->widget(DatePicker::classname(), [
-            'language' => 'ru',
-            'pluginOptions' => [
-                'autoclose'=>true,
-                'format' => 'yyyy-mm-dd'
-            ]
-    ])->label('Дата поездки'); ?>
-    <?= $form->field($model, 'time')->widget(TimePicker::className(),[
-        'options' => ['placeholder' => 'ВВедите время'],
+        'language'      => 'ru',
         'pluginOptions' => [
             'autoclose' => true,
+            'format'    => 'yyyy-mm-dd'
+        ]
+    ])->label('Дата поездки'); ?>
+    <?= $form->field($model, 'time')->widget(TimePicker::className(), [
+        'options'       => ['placeholder' => 'ВВедите время'],
+        'pluginOptions' => [
+            'autoclose'    => true,
             'showMeridian' => false
 
 
         ]
     ])->label('Время начала поездки'); ?>
     <?= $form->field($model, 'route')->textInput()->label('Маршрут'); ?>
-    <?= $form->field($model, 'comment')->textarea()->label('Комментарий');?>
+    <?= $form->field($model, 'comment')->textarea()->label('Комментарий'); ?>
     <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']);
     ActiveForm::end();
     ?>

@@ -23,6 +23,11 @@ class Order extends ActiveRecord
         ];
     }
 
+    public function getDepartment()
+    {
+        return $this->userDescription->department;
+    }
+
     public function getUserDescription()
     {
         return $this->hasOne(UserDescription::className(),['users_id'=>'users_id']);

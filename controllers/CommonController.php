@@ -12,7 +12,7 @@ class CommonController extends Controller
     public function actionIndex()
     {
         if (\Yii::$app->user->identity) {
-            $this->redirect('?r=order/test');
+            $this->redirect('?r=order/index');
         }
         return $this->actionLogin();
     }
@@ -21,7 +21,7 @@ class CommonController extends Controller
     {
         $model = new LoginForm();
         if ($model->load(\Yii::$app->request->post()) && $model->login()) {
-            $this->redirect('?r=order/test');
+            $this->redirect('?r=order/index');
         }
         return $this->render('login', ['model' => $model]);
     }
