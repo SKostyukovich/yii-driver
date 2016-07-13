@@ -1,14 +1,15 @@
 <?php
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 use kartik\export\ExportMenu;
 use yii\helpers\Html;
+use app\models\Statuslist;
 
 $columnsGrid = [
     [
         'attribute' => 'id',
-        'header'    => '№',
-
+        'header'    => '№ заказа',
+        
     ],
     [
         'attribute' => 'route',
@@ -31,16 +32,18 @@ $columnsGrid = [
         'header' => 'Заказчик'
 
     ],
-    [   'attribute'=> 'department',
-        'value'  => function ($data) {
-            return $data->userDescription->department;
-        },
-        'header' => 'Отдел',
+    ['attribute' => 'department',
+     'filter'    => \yii\helpers\ArrayHelper::map(\app\models\UserDescription::find()->all(), 'department',
+                                                  'department'),
+     'value'     => function ($data) {
+         return $data->userDescription->department;
+     },
+     'header'    => 'Отдел',
 
     ],
     [
         'attribute'      => 'status',
-        'filter'         => [1 => 'Заказ подтвержден', 2 => 'Заказ отклонен', 3 => 'В обработке'],
+        'filter'         => \yii\helpers\ArrayHelper::map(Statuslist::find()->all(), 'id', 'description'),
         'value'          => function ($data) {
             return $data->statuslist->description;
         },
@@ -83,17 +86,15 @@ $columnsGrid = [
      ],
     ],
 ];
-/*$dataProvider = new ActiveDataProvider([
-                                           'query'      => $query,
-                                           'pagination' => [
-                                               'pageSize' => 10,
-                                           ],
-                                       ]);*/
+?>
+<h2>Панель администратора</h2>
+<?php
 echo GridView::widget(
-    ['dataProvider' => $dataProvider,
+    [
+     'dataProvider' => $dataProvider,
      'filterModel'  => $searchModel,
-     'layout'       => "{items}\n{summary}\n{pager}",
+     //'layout'       => "{items}\n{summary}\n{pager}",
      'columns'      => $columnsGrid
     ]
 );
-
+?>

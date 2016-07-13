@@ -8,7 +8,9 @@ use kartik\widgets\TimePicker;
 use yii\grid\ActionColumn;
 use yii\helpers\Url;
 
-
+?>
+<h2>Панель Пользователя</h2>
+<?php
 $dataProvider = new ActiveDataProvider([
                                            'query'      => $query,
                                            'pagination' => [
@@ -19,7 +21,7 @@ echo GridView::widget([
                           'dataProvider' => $dataProvider,
                           'columns'      => [
                               ['attribute' => 'id',
-                               'header'    => '№'
+                               'header'    => '№ заказа'
                               ],
 
                               ['attribute' => 'route',
@@ -81,7 +83,6 @@ echo GridView::widget([
                               ],
                           ]
                       ]);
-
 ?>
 <div>
     <h2>Добавить заявку</h2>

@@ -22,7 +22,6 @@ $config = [
            'dateFormat' => 'd-M-Y',
            'datetimeFormat' => 'd-M-Y H:i:s',
            'timeFormat' => 'H:i:s',
-
            'locale' => 'ru-Ru', //your language locale
            'defaultTimeZone' => 'Europe/Berlin', // time zone
         ],
@@ -38,17 +37,25 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'common/error',
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.yandex.ru',
+                'username' => 's.kostyukovich@nekrasovka.ru',
+                'password' => 'mansion471',
+                'port' => '465',
+                'encryption' => 'ssl',
+            ],
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

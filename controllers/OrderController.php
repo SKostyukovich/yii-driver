@@ -79,10 +79,10 @@ class OrderController extends Controller
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->get());
 
-            return $this->render('admin', [
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel
-            ]);
+        return $this->render('admin', [
+            'dataProvider' => $dataProvider,
+            'searchModel'  => $searchModel
+        ]);
 
     }
 
@@ -118,6 +118,14 @@ class OrderController extends Controller
         $model = Order::findOne($id);
         $model->status = 4;
         $model->save();
+        $message = \Yii::$app->mailer->compose();
+        $message->setFrom('s.kostyukovich@nekrasovka.ru')->setTo('s.kostyukovich@gmail.com')->setSubject('test_theme')->setTextBody('test')->send();
         return $this->actionIndex();
+    }
+
+    public function actionHash()
+    {
+        $hash = \Yii::$app->getSecurity()->generatePasswordHash('testpassword2');
+        var_dump($hash);
     }
 }

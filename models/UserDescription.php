@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 class UserDescription extends ActiveRecord
@@ -17,4 +18,20 @@ class UserDescription extends ActiveRecord
     {
         return 'users_description';
     }
+
+
+    public function getUsers()
+    {
+        return $this->hasOne(UserForm::className(), ['id' => 'users_id']);
+    }
+
+    public function rules()
+    {
+        return [[
+                    ['name', 'surname', 'phone', 'email', 'department'],
+                    'safe'
+                ]
+        ];
+    }
 }
+

@@ -16,7 +16,7 @@ class LoginForm extends ActiveRecord
 
     public function validatePassword($attribute)
     {
-        if( $this->password !== User::findOne(['username'=>$this->username])->password)
+        if (!\Yii::$app->getSecurity()->validatePassword($this->password, User::findOne(['username'=>$this->username])->password))
         {   
             $this->addError($attribute, 'неправильный пароль');
         }

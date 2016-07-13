@@ -10,11 +10,13 @@ namespace app\models;
 
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
+
 class User extends ActiveRecord implements IdentityInterface
 {
     public static function tableName()
     {
-        return 'users';    }
+        return 'users';
+    }
 
     public static function findIdentity($id)
     {
@@ -40,4 +42,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         // TODO: Implement findIdentityByAccessToken() method.
     }
+
+    public function getUserDescription()
+    {
+        return $this->hasOne(UserDescription::className(), ['users_id' => 'id']);
+    }
+
 }
