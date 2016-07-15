@@ -39,6 +39,9 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Главная', 'url' => ['']],
             ['label' => 'О сервисе', 'url' => ['']],
+            Yii::$app->user->can('createPost')?(
+                ['label' => 'Администрирование', 'url' => ['admin/index']]
+            ) : (''),
             ['label' => 'Контакты', 'url' => ['']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['common/login']]

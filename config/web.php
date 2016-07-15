@@ -25,6 +25,15 @@ $config = [
            'locale' => 'ru-Ru', //your language locale
            'defaultTimeZone' => 'Europe/Berlin', // time zone
         ],
+        'controllerMap' => [
+            'migrate' => [
+                'class' => 'yii\console\controllers\MigrateController',
+                'templateFile' => '@jamband/schemadump/template.php',
+            ],
+            'schemadump' => [
+                'class' => 'jamband\schemadump\SchemaDumpController',
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'yii-driver',

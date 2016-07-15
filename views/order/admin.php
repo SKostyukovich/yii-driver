@@ -4,12 +4,12 @@ use yii\data\ActiveDataProvider;
 use kartik\export\ExportMenu;
 use yii\helpers\Html;
 use app\models\Statuslist;
+use kartik\widgets\DatePicker;
 
 $columnsGrid = [
     [
         'attribute' => 'id',
         'header'    => '№ заказа',
-        
     ],
     [
         'attribute' => 'route',
@@ -18,7 +18,7 @@ $columnsGrid = [
     [
         'attribute' => 'date',
         'format'    => 'date',
-        'header'    => 'Дата'
+        'header'    => 'Дата',
     ],
     [
         'attribute' => 'time',
@@ -32,13 +32,14 @@ $columnsGrid = [
         'header' => 'Заказчик'
 
     ],
-    ['attribute' => 'department',
-     'filter'    => \yii\helpers\ArrayHelper::map(\app\models\UserDescription::find()->all(), 'department',
-                                                  'department'),
-     'value'     => function ($data) {
-         return $data->userDescription->department;
-     },
-     'header'    => 'Отдел',
+    [
+        'attribute' => 'department',
+        'filter'    => \yii\helpers\ArrayHelper::map(\app\models\UserDescription::find()->all(), 'department',
+                                                     'department'),
+        'value'     => function ($data) {
+            return $data->userDescription->department;
+        },
+        'header'    => 'Отдел',
 
     ],
     [
@@ -69,21 +70,22 @@ $columnsGrid = [
         'header'    => 'Комментарий',
         'filter'    => [1 => 'в обработке', 2 => 'Выполнен'],
     ],
-    ['class'         => 'yii\grid\ActionColumn',
-     'header'        => 'Действия',
-     'headerOptions' => ['width' => '80'],
-     'template'      => '{view} {update} {delete} {link}',
-     'buttons'       => [
-         'update' => function ($url) {
-             return Html::a('<span style="color:black" class="glyphicon glyphicon-pencil"></span>', $url);
-         },
-         'view'   => function ($url) {
-             return Html::a('<span style="color:green" class="glyphicon glyphicon-eye-open"></span>', $url);
-         },
-         'delete' => function ($url) {
-             return Html::a('<span style="color:red" class="glyphicon glyphicon-trash"></span>', $url);
-         }
-     ],
+    [
+        'class'         => 'yii\grid\ActionColumn',
+        'header'        => 'Действия',
+        'headerOptions' => ['width' => '80'],
+        'template'      => '{view} {update} {delete} {link}',
+        'buttons'       => [
+            'update' => function ($url) {
+                return Html::a('<span style="color:black" class="glyphicon glyphicon-pencil"></span>', $url);
+            },
+            'view'   => function ($url) {
+                return Html::a('<span style="color:green" class="glyphicon glyphicon-eye-open"></span>', $url);
+            },
+            'delete' => function ($url) {
+                return Html::a('<span style="color:red" class="glyphicon glyphicon-trash"></span>', $url);
+            }
+        ],
     ],
 ];
 ?>
@@ -91,10 +93,10 @@ $columnsGrid = [
 <?php
 echo GridView::widget(
     [
-     'dataProvider' => $dataProvider,
-     'filterModel'  => $searchModel,
-     //'layout'       => "{items}\n{summary}\n{pager}",
-     'columns'      => $columnsGrid
+        'dataProvider' => $dataProvider,
+        'filterModel'  => $searchModel,
+        //'layout'       => "{items}\n{summary}\n{pager}",
+        'columns'      => $columnsGrid
     ]
 );
 ?>

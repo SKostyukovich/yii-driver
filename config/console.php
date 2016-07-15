@@ -14,6 +14,7 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
@@ -26,6 +27,15 @@ $config = [
             ],
         ],
         'db' => $db,
+    ],
+    'controllerMap' => [
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'templateFile' => '@jamband/schemadump/template.php',
+        ],
+        'schemadump' => [
+            'class' => 'jamband\schemadump\SchemaDumpController',
+        ],
     ],
     'params' => $params,
     /*

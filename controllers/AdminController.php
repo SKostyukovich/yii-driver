@@ -12,7 +12,6 @@ use app\models\UserDescription;
 use app\models\UserForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\User;
 use yii\data\ActiveDataProvider;
 
 class AdminController extends Controller
@@ -48,6 +47,7 @@ class AdminController extends Controller
             $model->save();
             $userDescription->link('users',$model);
             $userDescription->save();
+            return $this->redirect('?r=admin/index');
         }
         $query = UserForm::find()->joinWith('userDescription');
         $dataProvider = new ActiveDataProvider(['query' => $query,
@@ -74,7 +74,7 @@ class AdminController extends Controller
         if (($model = UserForm::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Такая страница не существует');
         }
     }
 }
